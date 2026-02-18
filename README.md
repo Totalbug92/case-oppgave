@@ -118,7 +118,7 @@ With current config, monorepo tags are component-based:
 
 Workflow: [ .github/workflows/deploy-azure.yml ](.github/workflows/deploy-azure.yml)
 
-On GitHub Release publish, it deploys directly to Azure Web Apps using OIDC + Azure CLI (no publish profile XML required).
+On GitHub Release (published/released/created) or version tag push (`backend-v*`, `frontend-v*`), it deploys directly to Azure Web Apps using OIDC + Azure CLI (no publish profile XML required).
 
 Required GitHub repository secrets:
 
