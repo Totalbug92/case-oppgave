@@ -101,6 +101,8 @@ Workflow: [ .github/workflows/commitlint.yml ](.github/workflows/commitlint.yml)
 
 `release-please` reads conventional commits on `main`, opens/updates a Release PR, and when merged creates tags/releases.
 
+Note: if you want downstream workflows (like deploy on `release.published`) to trigger, configure a PAT secret named `RELEASE_PLEASE_TOKEN` and use it in `release-please` instead of only `GITHUB_TOKEN`.
+
 Important files:
 
 - [release-please-config.json](release-please-config.json)
@@ -116,14 +118,17 @@ With current config, monorepo tags are component-based:
 
 Workflow: [ .github/workflows/deploy-azure.yml ](.github/workflows/deploy-azure.yml)
 
-On GitHub Release publish, it deploys directly to Azure Web Apps (no container registry required).
+On GitHub Release publish, it deploys directly to Azure Web Apps using OIDC + Azure CLI (no publish profile XML required).
 
 Required GitHub repository secrets:
 
+- `AZURE_CLIENT_ID`
+- `AZURE_TENANT_ID`
+- `AZURE_SUBSCRIPTION_ID`
+- `AZURE_RESOURCE_GROUP`
 - `AZURE_BACKEND_WEBAPP_NAME`
 - `AZURE_FRONTEND_WEBAPP_NAME`
-- `AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND`
-- `AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND`
+- `BACKEND_DATABASE_URL`
 - `FRONTEND_PUBLIC_API_URL`
 
 Recommended low-cost Azure resources:
@@ -140,14 +145,17 @@ This keeps cost low while still showing production-style CI/CD and cloud deploym
 1. Create two Linux Web Apps (same App Service Plan):
    - backend app (Python 3.11)
    - frontend app (Node 20)
-2. Download publish profile from each Web App and store in GitHub secrets:
-   - backend -> `AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND`
-   - frontend -> `AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND`
-3. Set backend startup command in Azure Web App:
+2. Create App Registration + Service Principal and give it `Contributor` on the Resource Group.
+3. Add Federated Credentials for GitHub Actions (at minimum):
+   - `repo:<owner>/<repo>:ref:refs/heads/main`
+   - `repo:<owner>/<repo>:ref:refs/tags/*`
+4. Add OIDC secrets in GitHub:
+   - `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
+5. Set backend startup command in Azure Web App:
    - `gunicorn -w 2 -k uvicorn.workers.UvicornWorker main:app`
-4. Set backend app setting:
+6. Set backend app setting:
    - `DATABASE_URL` = your Azure PostgreSQL connection string
-5. Set frontend app setting:
+7. Set frontend app setting:
    - `NEXT_PUBLIC_API_URL` = backend public URL (e.g. `https://<backend>.azurewebsites.net`)
 
 #### What you must configure in GitHub
