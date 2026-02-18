@@ -7,11 +7,11 @@ import {
   Building2,
   Briefcase,
   BarChart3,
+  Code2,
   Settings,
   ChevronDown,
   Menu,
   X,
-  Scale,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -38,14 +38,9 @@ const navItems: NavItem[] = [
     icon: <Briefcase className="w-5 h-5" />,
   },
   {
-    label: 'Kostnadsdeling',
-    href: '/cost-sharing',
-    icon: <Scale className="w-5 h-5" />,
-  },
-  {
-    label: 'Rapporter',
-    href: '/reports',
-    icon: <BarChart3 className="w-5 h-5" />,
+    label: 'Dev',
+    href: '/dev',
+    icon: <Code2 className="w-5 h-5" />,
   },
 ];
 
@@ -62,7 +57,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           sidebarOpen ? 'w-64' : 'w-0'
         } hidden lg:flex flex-col bg-card border-r border-border transition-all duration-300 overflow-hidden`}
       >
-        <div className="p-6 border-b border-border">
+        <div className="h-20 px-6 border-b border-border flex items-center">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
               <Briefcase className="w-6 h-6 text-primary-foreground" />
@@ -73,7 +68,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
         <nav className="flex-1 p-4 space-y-2">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive =
+              pathname === item.href ||
+              (item.href !== '/' && pathname.startsWith(`${item.href}/`));
             return (
               <Link
                 key={item.href}
@@ -108,7 +105,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Navigation */}
-        <header className="bg-card border-b border-border px-4 lg:px-8 py-4 flex items-center justify-between">
+        <header className="h-20 bg-card border-b border-border px-4 lg:px-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -145,7 +142,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         {mobileMenuOpen && (
           <div className="lg:hidden bg-card border-b border-border p-4 space-y-2">
             {navItems.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive =
+                pathname === item.href ||
+                (item.href !== '/' && pathname.startsWith(`${item.href}/`));
               return (
                 <Link
                   key={item.href}

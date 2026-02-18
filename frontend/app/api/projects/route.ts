@@ -8,17 +8,25 @@ export async function GET() {
     }
     const projects = await response.json();
 
-    // Enrich each project with a total_cost field from the backend cost-overview
+    // Enrich each project with total_cost and number of linked customers
     const enriched = await Promise.all(
       (projects || []).map(async (proj: any) => {
         try {
-          const r = await fetch(`${API_BASE_URL}/projects/${proj.id}/cost-overview`);
-          if (!r.ok) return { ...proj, total_cost: 0 };
-          const overview = await r.json();
-          // backend returns `total_expenses` in ProjectCostOverview
-          return { ...proj, total_cost: overview?.total_expenses ?? 0 };
+          const [overviewRes, customersRes] = await Promise.all([
+            fetch(`${API_BASE_URL}/projects/${proj.id}/cost-overview`),
+            fetch(`${API_BASE_URL}/projects/${proj.id}/customers`),
+          ]);
+
+          const overview = overviewRes.ok ? await overviewRes.json() : null;
+          const customers = customersRes.ok ? await customersRes.json() : [];
+
+          return {
+            ...proj,
+            total_cost: overview?.total_expenses ?? 0,
+            customers: Array.isArray(customers) ? customers.length : 0,
+          };
         } catch (e) {
-          return { ...proj, total_cost: 0 };
+          return { ...proj, total_cost: 0, customers: 0 };
         }
       })
     );

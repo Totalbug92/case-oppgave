@@ -2,7 +2,7 @@ import csv
 import os
 from sqlalchemy.orm import Session
 from sqlalchemy import text
-from models import Project, Expense, Customer
+from models import Project, Expense, Customer, ProjectCustomer
 from database import SessionLocal, engine
 from models import Base
 
@@ -17,9 +17,9 @@ def seed_default_customers(db: Session):
         return
     
     default_customers = [
-        Customer(name="Acme Corp", description="Acme Corporation"),
-        Customer(name="TechStart Inc", description="TechStart Industries"),
-        Customer(name="Global Solutions", description="Global Solutions Ltd"),
+        Customer(name="Oslo kommune", description="Kommune i Oslo fylke"),
+        Customer(name="Bergen kommune", description="Kommune i Vestland fylke"),
+        Customer(name="Trondheim kommune", description="Kommune i Trøndelag fylke"),
     ]
     
     db.add_all(default_customers)
@@ -110,6 +110,45 @@ def seed_expenses_from_csv(db: Session):
         db.rollback()
 
 
+def seed_default_project_allocations(db: Session):
+    """Create deterministic default customer allocations per project for demo data."""
+
+    existing_allocations = db.query(ProjectCustomer).first()
+    if existing_allocations:
+        print("Database already has project-customer allocations. Skipping allocation seeding.")
+        return
+
+    projects = db.query(Project).order_by(Project.id.asc()).all()
+    customers = db.query(Customer).order_by(Customer.id.asc()).all()
+
+    if not projects or not customers:
+        print("No projects or customers found. Skipping allocation seeding.")
+        return
+
+    allocations_to_add = []
+
+    for project in projects:
+        if len(customers) >= 3:
+            distribution = [(0, 50.0), (1, 30.0), (2, 20.0)]
+        elif len(customers) == 2:
+            distribution = [(0, 60.0), (1, 40.0)]
+        else:
+            distribution = [(0, 100.0)]
+
+        for customer_idx, percentage in distribution:
+            allocations_to_add.append(
+                ProjectCustomer(
+                    project_id=project.id,
+                    customer_id=customers[customer_idx].id,
+                    cost_percentage=percentage,
+                )
+            )
+
+    db.add_all(allocations_to_add)
+    db.commit()
+    print(f"Successfully created {len(allocations_to_add)} project-customer allocations")
+
+
 def init_db():
     """Initialize database and seed with data"""
     try:
@@ -121,6 +160,7 @@ def init_db():
         try:
             seed_default_customers(db)
             seed_expenses_from_csv(db)
+            seed_default_project_allocations(db)
             
             # After seeding, reset all sequences to ensure auto-increment works correctly
             try:

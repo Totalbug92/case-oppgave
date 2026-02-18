@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 # Import our modules
 from models import Base
+from models import Project
 from database import engine, get_db
 from routes import router
 from schemas import ExpenseCreate
@@ -69,6 +70,7 @@ async def import_expenses_from_csv(file: UploadFile = File(...), db: Session = D
     reader = csv.DictReader(stream)
     
     expenses = []
+    project_ids = set()
     errors = []
     
     for row_num, row in enumerate(reader, start=2):  # Start at 2 because header is row 1
@@ -80,6 +82,7 @@ async def import_expenses_from_csv(file: UploadFile = File(...), db: Session = D
                 description=row.get('Description', '')
             )
             expenses.append(expense)
+            project_ids.add(expense.project_id)
         except (ValueError, KeyError) as e:
             errors.append(f"Row {row_num}: {str(e)}")
     
@@ -91,10 +94,28 @@ async def import_expenses_from_csv(file: UploadFile = File(...), db: Session = D
         }
     
     try:
+        # Ensure referenced projects exist before inserting expenses
+        existing_project_ids = {
+            pid for (pid,) in db.query(Project.id).filter(Project.id.in_(project_ids)).all()
+        }
+        missing_project_ids = sorted(project_ids - existing_project_ids)
+
+        if missing_project_ids:
+            db.add_all([
+                Project(
+                    id=project_id,
+                    name=f"Project {project_id}",
+                    description=f"Auto-created from CSV import (ProjectID {project_id})",
+                )
+                for project_id in missing_project_ids
+            ])
+            db.commit()
+
         created = crud.bulk_create_expenses(db, expenses)
         return {
             "status": "success",
             "imported": len(created),
+            "created_projects": len(missing_project_ids),
             "message": f"Successfully imported {len(created)} expenses"
         }
     except Exception as e:

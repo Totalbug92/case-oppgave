@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,12 +11,10 @@ import {
   Trash2,
   Users,
   DollarSign,
-  Calendar,
 } from 'lucide-react';
 import { getProjects } from '@/lib/api-client';
 import { CreateProjectModal } from './create-modal';
 import { EditProjectModal } from './edit-modal';
-import { ProjectDetailModal } from './detail-modal';
 
 interface Project {
   id: number;
@@ -27,11 +26,11 @@ interface Project {
 }
 
 export function ProjectsView() {
+  const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
-  const [detailProject, setDetailProject] = useState<Project | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -41,8 +40,8 @@ export function ProjectsView() {
   const fetchProjects = async () => {
     try {
       setIsLoading(true);
-      const data = await getProjects();
-      setProjects(Array.isArray(data) ? data : data.data || []);
+      const data: any = await getProjects();
+      setProjects(Array.isArray(data) ? data : data?.data || []);
     } catch (error) {
       console.error('[Projects] Error fetching projects:', error);
     } finally {
@@ -118,7 +117,7 @@ export function ProjectsView() {
             <Card
               key={project.id}
               className="bg-card border border-border hover:border-primary/50 transition-all hover:shadow-lg cursor-pointer group"
-              onClick={() => setDetailProject(project)}
+              onClick={() => router.push(`/projects/${project.id}`)}
             >
               <div className="p-6">
                 {/* Status Badge */}
@@ -154,7 +153,7 @@ export function ProjectsView() {
                       <span className="text-sm">Involvert kunder</span>
                     </div>
                     <span className="font-semibold text-foreground">
-                      {project.customers}
+                      {project.customers ?? 0}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
@@ -229,13 +228,6 @@ export function ProjectsView() {
         />
       )}
 
-      {detailProject && (
-        <ProjectDetailModal
-          project={detailProject}
-          isOpen={!!detailProject}
-          onClose={() => setDetailProject(null)}
-        />
-      )}
     </div>
   );
 }

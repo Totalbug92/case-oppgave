@@ -82,12 +82,12 @@ class ExpenseResponse(ExpenseBase):
 class ProjectCustomerBase(BaseModel):
     project_id: int
     customer_id: int
-    cost_percentage: float = Field(..., ge=0, le=100)
+    cost_percentage: float = Field(..., gt=0, le=100)
 
     @validator('cost_percentage')
     def validate_percentage(cls, v):
-        if v < 0 or v > 100:
-            raise ValueError('Cost percentage must be between 0 and 100')
+        if v <= 0 or v > 100:
+            raise ValueError('Cost percentage must be greater than 0 and at most 100')
         return v
 
 
@@ -96,12 +96,12 @@ class ProjectCustomerCreate(ProjectCustomerBase):
 
 
 class ProjectCustomerUpdate(BaseModel):
-    cost_percentage: float = Field(..., ge=0, le=100)
+    cost_percentage: float = Field(..., gt=0, le=100)
 
     @validator('cost_percentage')
     def validate_percentage(cls, v):
-        if v < 0 or v > 100:
-            raise ValueError('Cost percentage must be between 0 and 100')
+        if v <= 0 or v > 100:
+            raise ValueError('Cost percentage must be greater than 0 and at most 100')
         return v
 
 

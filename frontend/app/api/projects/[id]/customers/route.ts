@@ -69,10 +69,12 @@ export async function POST(
         body: JSON.stringify(body),
       }
     );
+    const data = await response.json().catch(() => ({}));
+
     if (!response.ok) {
-      throw new Error(`API error: ${response.statusText}`);
+      return Response.json(data, { status: response.status });
     }
-    const data = await response.json();
+
     return Response.json(data);
   } catch (error) {
     console.error('API route error:', error);

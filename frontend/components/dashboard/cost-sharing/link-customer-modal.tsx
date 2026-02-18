@@ -35,8 +35,10 @@ export function LinkCustomerModal({
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>(
     availableCustomers[0]?.id.toString() || ''
   );
-  const [costPercentage, setCostPercentage] = useState('0');
-  const [costAmount, setCostAmount] = useState('0');
+  const [costPercentage, setCostPercentage] = useState('10');
+  const [costAmount, setCostAmount] = useState(
+    (((project.total_cost || 0) * 10) / 100).toFixed(2)
+  );
   const [mode, setMode] = useState<'percent' | 'amount'>('percent');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,18 +52,27 @@ export function LinkCustomerModal({
         percent = project.total_cost ? (amt / project.total_cost) * 100 : 0;
       }
 
+      if (percent <= 0) {
+        alert('Kostnadsandel må være større enn 0.');
+        return;
+      }
+
       const res = await fetch(`/api/projects/${project.id}/customers`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           project_id: project.id,
           customer_id: parseInt(selectedCustomerId, 10),
-          cost_percentage: Math.min(100, Math.max(0, percent)),
+          cost_percentage: Math.min(100, Math.max(0.1, percent)),
         }),
       });
 
       if (res.ok) {
         onSuccess();
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        const message = errorData?.detail || errorData?.error || 'Kunne ikke legge til kunde i prosjektet';
+        alert(message);
       }
     } catch (error) {
       console.error('[LinkCustomer] Error:', error);
@@ -72,9 +83,6 @@ export function LinkCustomerModal({
 
   if (!isOpen) return null;
 
-  const selectedCustomer = availableCustomers.find(
-    (c) => c.id.toString() === selectedCustomerId
-  );
   const percentage = parseFloat(costPercentage) || 0;
   const allocatedNok = ((project.total_cost * percentage) / 100) || 0;
 
@@ -165,7 +173,7 @@ export function LinkCustomerModal({
                 <input
                   type="number"
                   required
-                  min="0"
+                  min="0.1"
                   max={100}
                   step="0.1"
                   value={costPercentage}
@@ -182,7 +190,7 @@ export function LinkCustomerModal({
                 <input
                   type="number"
                   required
-                  min="0"
+                  min="0.01"
                   max={project.total_cost}
                   step="0.01"
                   value={costAmount}
@@ -191,7 +199,7 @@ export function LinkCustomerModal({
                   placeholder="0"
                 />
                 <p className="text-xs text-muted-foreground mt-2">
-                  {(parseFloat(costPercentage) || 0).toFixed(1)}% — {(parseFloat(costAmount) || 0 / 1000000).toFixed(2)}M
+                  {(parseFloat(costPercentage) || 0).toFixed(1)}% — {((parseFloat(costAmount) || 0) / 1000000).toFixed(2)}M
                 </p>
               </>
             )}
@@ -201,31 +209,31 @@ export function LinkCustomerModal({
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              onClick={() => setCostPercentage('50')}
+              onClick={() => onChangePercentage('50')}
               className="px-3 py-2 bg-secondary hover:bg-border rounded-lg text-sm text-foreground transition-colors"
             >
               50%
             </button>
             <button
               type="button"
-              onClick={() => setCostPercentage('33.3')}
+              onClick={() => onChangePercentage('33.3')}
               className="px-3 py-2 bg-secondary hover:bg-border rounded-lg text-sm text-foreground transition-colors"
             >
               33%
             </button>
             <button
               type="button"
-              onClick={() => setCostPercentage('100')}
+              onClick={() => onChangePercentage('100')}
               className="px-3 py-2 bg-secondary hover:bg-border rounded-lg text-sm text-foreground transition-colors"
             >
               100%
             </button>
             <button
               type="button"
-              onClick={() => setCostPercentage('0')}
+              onClick={() => onChangePercentage('10')}
               className="px-3 py-2 bg-secondary hover:bg-border rounded-lg text-sm text-foreground transition-colors"
             >
-              0%
+              10%
             </button>
           </div>
 

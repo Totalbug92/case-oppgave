@@ -295,7 +295,7 @@ def reset_database(db: Session = Depends(get_db)):
     """Reset database to initial state and reseed from dataset.csv"""
     from models import Base
     from database import engine
-    from seed import seed_expenses_from_csv, seed_default_customers
+    from seed import seed_expenses_from_csv, seed_default_customers, seed_default_project_allocations
     from sqlalchemy import text
     
     try:
@@ -308,6 +308,7 @@ def reset_database(db: Session = Depends(get_db)):
         # Reseed data
         seed_default_customers(db)
         seed_expenses_from_csv(db)
+        seed_default_project_allocations(db)
         
         # Reset sequences
         try:
