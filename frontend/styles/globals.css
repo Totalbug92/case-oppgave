@@ -151,6 +151,3 @@ input[type=number] {
 
 /* Firefox scrollbar */
 
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary) var(--secondary);
-}

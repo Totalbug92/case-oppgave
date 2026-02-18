@@ -99,7 +99,7 @@ Workflow: [ .github/workflows/commitlint.yml ](.github/workflows/commitlint.yml)
 
 ### Release Please (version tags + GitHub Releases)
 
-`release-please` reads conventional commits on `master` (and `main` fallback), opens/updates a Release PR, and when merged creates tags/releases.
+`release-please` reads conventional commits on `master` (and `main` fallback), opens/updates a Release PR, and when merged creates one lockstep tag/release for the whole monorepo.
 
 Note: if you want downstream workflows (like deploy on `release.published`) to trigger, configure a PAT secret named `RELEASE_PLEASE_TOKEN` and use it in `release-please` instead of only `GITHUB_TOKEN`.
 
@@ -109,16 +109,15 @@ Important files:
 - [.release-please-manifest.json](.release-please-manifest.json)
 - [ .github/workflows/release-please.yml ](.github/workflows/release-please.yml)
 
-With current config, monorepo tags are component-based:
+With current config, monorepo uses lockstep tags:
 
-- `frontend-vX.Y.Z`
-- `backend-vX.Y.Z`
+- `vX.Y.Z`
 
 ### Azure Deploy (simplified for interview)
 
 Workflow: [ .github/workflows/deploy-azure.yml ](.github/workflows/deploy-azure.yml)
 
-On GitHub Release (published/released/created) or version tag push (`backend-v*`, `frontend-v*`), it deploys directly to Azure Web Apps using OIDC + Azure CLI (no publish profile XML required).
+On GitHub Release (published/released/created) or version tag push (`v*`), it deploys both frontend and backend to Azure Web Apps using OIDC + Azure CLI (no publish profile XML required).
 
 Required GitHub repository secrets:
 
