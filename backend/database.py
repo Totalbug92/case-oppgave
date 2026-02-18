@@ -14,7 +14,6 @@ engine = create_engine(
     pool_recycle=3600,   # Recycle connections after 1 hour
 )
 
-
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
