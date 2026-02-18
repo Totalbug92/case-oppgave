@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: case_postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: casedb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - case_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d casedb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: case_backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://user:password@db:5432/casedb
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - case_network
+    volumes:
+      - ./backend:/app
+      - ./dataset.csv:/app/dataset.csv:ro
+
+  migrate:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: case_backend_migrate
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - case_network
+    volumes:
+      - ./backend:/app
+    entrypoint: ["/bin/sh", "-c", "alembic -c alembic.ini upgrade head"]
+    restart: 'no'
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: case_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - case_network
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+
+volumes:
+  postgres_data:
+
+networks:
+  case_network:
+    driver: bridge

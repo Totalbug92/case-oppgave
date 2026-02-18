@@ -1,0 +1,30 @@
+
+Technical - Case
+
+I denne oppgaven skal du utvikle en webløsning som visualiserer kundenes kostnader på ulike prosjekter. Løsningen skal kjøre på valgfri public cloud platform. Du vil få tilgang til en liste med faste utgifter fra et regnskapssystem som skal integreres i løsningen. Systemet skal også gi brukeren mulighet til å administrere (opprette og redigere) både kunder og prosjekter.
+
+Det viktigste vi ser etter er arkitektur, godt begrunnede tekniske valg og resonering bak din implementasjon – ikke en finpusset visuell løsning.
+
+Du står fritt til å velge ditt foretrukne Javascript/Typescript-rammeverk (React, Angular, Vue, etc.) for denne oppgaven. 
+
+Vi forventer at du starter caseintervjuet med å presentere løsningen din og begrunnelsen for de viktigste valgene i løpet av de første 10 minuttene. De resterende 50 minuttene bruker vi på spørsmål og diskusjon.
+
+
+Oppgave: Webløsning for prosjektkostnader
+
+Kommunene i Norge ønsker bedre innsikt i hvilke kostnader de har på ulike prosjekter. De har i dag en rekke spredte regneark og rapporter, men mangler en samlet oversikt.
+
+Kundebehov / problemstillinger
+1. Kunde- og prosjektadministrasjon
+Brukerne trenger en robust måte å opprette, se og redigere kunder og prosjekter, samt knytte prosjekter til kunder. Implementer funksjonalitet for å løse problemet.
+
+2. Databaseløsning
+Løsningen må lagre kunde- og prosjektdata på en måte som fungerer godt i et cloud-miljø. Design databasen og sette opp infrastrukturen slik at løsningen blir robust og kostnadseffektiv.
+
+3. Oversikt over kostnader
+Kommunen ønsker å få oversikt over totale kostnader per kunde basert på utgifter som registreres på prosjekter. Implementer funksjonalitet som løser dette problemet for kunden. Bonus: De ønsker også å ha mulighet til å se kostnader per prosjekt per kunde. 
+
+4. Delvis kostnadsdekning
+Flere kunder kan være involvert i samme prosjekt og dele på kostnaden (f.eks. Kunde A 50 %, Kunde B 25 %, Kunde C 25 %). 
+Hvordan ville du håndtert dette på en måte som sikrer at summen aldri overstiger 100 %, og at oversiktene gir korrekt bilde av kostnadsfordelingen?
+Beskriv din tilnærming til testing for å sikre at introduksjonen av denne nye funksjonaliteten ikke forårsaker regresjon eller feil i eksisterende funksjonalitet.

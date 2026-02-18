@@ -1,0 +1,101 @@
+ID,ProjectID,ExpenseType,Amount,Description
+1,1,Markedsføring og salg,531378,Forsikring for prosjektet og skatter
+2,2,Personalkostnader,500110,Forsikring for prosjektet og skatter
+3,3,Kontorkostnader,146990,Annonsering og kampanjer
+4,4,Kontorkostnader,158483,Kjøp av råvarer og komponenter
+5,5,Forsikringer og avgifter,433570,Transport og overnatting for prosjektarbeid
+6,6,Kontorkostnader,64254,Transport og overnatting for prosjektarbeid
+7,7,Markedsføring og salg,532452,Budsjettreserver for uforutsette utgifter
+8,8,Reisekostnader,87073,Kjøp av råvarer og komponenter
+9,9,Tekniske kostnader,284907,Annonsering og kampanjer
+10,10,Forsikringer og avgifter,114570,Budsjettreserver for uforutsette utgifter
+11,1,Produksjonskostnader,130577,Programvarelisenser og IT-support
+12,2,Uforutsette kostnader,499572,Lønninger og sosiale avgifter for ansatte
+13,3,Uforutsette kostnader,466522,Transport og overnatting for prosjektarbeid
+14,4,Materialkostnader,390840,Annonsering og kampanjer
+15,5,Produksjonskostnader,294482,Annonsering og kampanjer
+16,6,Forsikringer og avgifter,129904,Lønninger og sosiale avgifter for ansatte
+17,7,Forsikringer og avgifter,382982,Budsjettreserver for uforutsette utgifter
+18,8,Uforutsette kostnader,477136,Kjøp av råvarer og komponenter
+19,9,Materialkostnader,401014,Kjøp av råvarer og komponenter
+20,10,Markedsføring og salg,418915,Lønninger og sosiale avgifter for ansatte
+21,1,Uforutsette kostnader,546814,Leie av kontor og kontorrekvisita
+22,2,Tekniske kostnader,424314,Budsjettreserver for uforutsette utgifter
+23,3,Kontorkostnader,424131,Budsjettreserver for uforutsette utgifter
+24,4,Personalkostnader,428040,Programvarelisenser og IT-support
+25,5,Kontorkostnader,404792,Programvarelisenser og IT-support
+26,6,Markedsføring og salg,293998,Lønninger og sosiale avgifter for ansatte
+27,7,Personalkostnader,402893,Leie av kontor og kontorrekvisita
+28,8,Reisekostnader,214610,Forsikring for prosjektet og skatter
+29,9,Kontorkostnader,582574,Leie av kontor og kontorrekvisita
+30,10,Uforutsette kostnader,421938,Transport og overnatting for prosjektarbeid
+31,1,Materialkostnader,180317,Kjøp av råvarer og komponenter
+32,2,Kontorkostnader,63640,Kjøp av råvarer og komponenter
+33,3,Kontorkostnader,488879,Transport og overnatting for prosjektarbeid
+34,4,Kontorkostnader,53912,Kjøp av råvarer og komponenter
+35,5,Forsikringer og avgifter,231658,Programvarelisenser og IT-support
+36,6,Personalkostnader,71752,Transport og overnatting for prosjektarbeid
+37,7,Materialkostnader,532284,Annonsering og kampanjer
+38,8,Personalkostnader,582285,Annonsering og kampanjer
+39,9,Tekniske kostnader,496222,Annonsering og kampanjer
+40,10,Forsikringer og avgifter,287507,Transport og overnatting for prosjektarbeid
+41,1,Kontorkostnader,120381,Annonsering og kampanjer
+42,2,Reisekostnader,366412,Forsikring for prosjektet og skatter
+43,3,Forsikringer og avgifter,381213,Forsikring for prosjektet og skatter
+44,4,Reisekostnader,141757,Leie av utstyr og vedlikehold
+45,5,Personalkostnader,223584,Kjøp av råvarer og komponenter
+46,6,Personalkostnader,411582,Leie av utstyr og vedlikehold
+47,7,Tekniske kostnader,420128,Forsikring for prosjektet og skatter
+48,8,Markedsføring og salg,51913,Transport og overnatting for prosjektarbeid
+49,9,Markedsføring og salg,495302,Leie av kontor og kontorrekvisita
+50,10,Produksjonskostnader,63429,Kjøp av råvarer og komponenter
+51,1,Uforutsette kostnader,174349,Annonsering og kampanjer
+52,2,Tekniske kostnader,326051,Transport og overnatting for prosjektarbeid
+53,3,Materialkostnader,453304,Lønninger og sosiale avgifter for ansatte
+54,4,Tekniske kostnader,165616,Kjøp av råvarer og komponenter
+55,5,Uforutsette kostnader,110155,Lønninger og sosiale avgifter for ansatte
+56,6,Materialkostnader,312613,Leie av utstyr og vedlikehold
+57,7,Materialkostnader,93295,Lønninger og sosiale avgifter for ansatte
+58,8,Forsikringer og avgifter,124253,Programvarelisenser og IT-support
+59,9,Kontorkostnader,215560,Budsjettreserver for uforutsette utgifter
+60,10,Produksjonskostnader,460191,Programvarelisenser og IT-support
+61,1,Forsikringer og avgifter,298082,Leie av kontor og kontorrekvisita
+62,2,Reisekostnader,196984,Leie av kontor og kontorrekvisita
+63,3,Personalkostnader,394271,Budsjettreserver for uforutsette utgifter
+64,4,Kontorkostnader,431094,Budsjettreserver for uforutsette utgifter
+65,5,Markedsføring og salg,233645,Forsikring for prosjektet og skatter
+66,6,Tekniske kostnader,275273,Lønninger og sosiale avgifter for ansatte
+67,7,Tekniske kostnader,301009,Leie av kontor og kontorrekvisita
+68,8,Produksjonskostnader,507439,Budsjettreserver for uforutsette utgifter
+69,9,Tekniske kostnader,585340,Forsikring for prosjektet og skatter
+70,10,Tekniske kostnader,65741,Forsikring for prosjektet og skatter
+71,1,Kontorkostnader,144275,Kjøp av råvarer og komponenter
+72,2,Tekniske kostnader,356130,Budsjettreserver for uforutsette utgifter
+73,3,Tekniske kostnader,317247,Programvarelisenser og IT-support
+74,4,Uforutsette kostnader,444956,Forsikring for prosjektet og skatter
+75,5,Tekniske kostnader,367414,Lønninger og sosiale avgifter for ansatte
+76,6,Kontorkostnader,383526,Programvarelisenser og IT-support
+77,7,Forsikringer og avgifter,423758,Lønninger og sosiale avgifter for ansatte
+78,8,Markedsføring og salg,228877,Leie av utstyr og vedlikehold
+79,9,Markedsføring og salg,183847,Programvarelisenser og IT-support
+80,10,Personalkostnader,260536,Transport og overnatting for prosjektarbeid
+81,1,Materialkostnader,121892,Programvarelisenser og IT-support
+82,2,Markedsføring og salg,96774,Leie av utstyr og vedlikehold
+83,3,Kontorkostnader,340795,Leie av kontor og kontorrekvisita
+84,4,Personalkostnader,375029,Leie av kontor og kontorrekvisita
+85,5,Markedsføring og salg,197069,Forsikring for prosjektet og skatter
+86,6,Personalkostnader,508396,Budsjettreserver for uforutsette utgifter
+87,7,Materialkostnader,113003,Annonsering og kampanjer
+88,8,Reisekostnader,398115,Lønninger og sosiale avgifter for ansatte
+89,9,Tekniske kostnader,477225,Budsjettreserver for uforutsette utgifter
+90,10,Reisekostnader,224743,Annonsering og kampanjer
+91,1,Personalkostnader,513155,Programvarelisenser og IT-support
+92,2,Kontorkostnader,134917,Forsikring for prosjektet og skatter
+93,3,Reisekostnader,88429,Programvarelisenser og IT-support
+94,4,Personalkostnader,393619,Kjøp av råvarer og komponenter
+95,5,Forsikringer og avgifter,132727,Leie av kontor og kontorrekvisita
+96,6,Markedsføring og salg,372953,Leie av kontor og kontorrekvisita
+97,7,Personalkostnader,269058,Transport og overnatting for prosjektarbeid
+98,8,Reisekostnader,125523,Annonsering og kampanjer
+99,9,Forsikringer og avgifter,163417,Transport og overnatting for prosjektarbeid
+100,10,Reisekostnader,438490,Leie av kontor og kontorrekvisita
