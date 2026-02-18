@@ -99,7 +99,7 @@ Workflow: [ .github/workflows/commitlint.yml ](.github/workflows/commitlint.yml)
 
 ### Release Please (version tags + GitHub Releases)
 
-`release-please` reads conventional commits on `main`, opens/updates a Release PR, and when merged creates tags/releases.
+`release-please` reads conventional commits on `master` (and `main` fallback), opens/updates a Release PR, and when merged creates tags/releases.
 
 Note: if you want downstream workflows (like deploy on `release.published`) to trigger, configure a PAT secret named `RELEASE_PLEASE_TOKEN` and use it in `release-please` instead of only `GITHUB_TOKEN`.
 
@@ -161,5 +161,5 @@ This keeps cost low while still showing production-style CI/CD and cloud deploym
 #### What you must configure in GitHub
 
 1. Add all required secrets listed above.
-2. Keep using conventional commits on `main`.
+2. Keep using conventional commits on `master`.
 3. Merge the `release-please` PR to publish a GitHub Release and trigger deploy.
