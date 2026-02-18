@@ -2,7 +2,11 @@ name: deploy-azure
 
 on:
   release:
-    types: [published]
+    types: [published, released, created]
+  push:
+    tags:
+      - 'backend-v*'
+      - 'frontend-v*'
   workflow_dispatch:
 
 permissions:
@@ -17,6 +21,13 @@ jobs:
       deploy_backend: ${{ steps.vars.outputs.deploy_backend }}
       deploy_frontend: ${{ steps.vars.outputs.deploy_frontend }}
     steps:
+      - name: Debug event context
+        run: |
+          echo "event_name=${{ github.event_name }}"
+          echo "ref=${{ github.ref }}"
+          echo "ref_name=${{ github.ref_name }}"
+          echo "release_tag=${{ github.event.release.tag_name || '' }}"
+
       - name: Resolve release scope
         id: vars
         shell: bash
