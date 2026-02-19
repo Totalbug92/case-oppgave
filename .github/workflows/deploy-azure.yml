@@ -47,6 +47,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build backend dependencies (vendored)
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r backend/requirements.txt -t backend/.python_packages/lib/site-packages
+
       - name: Azure login (OIDC)
         uses: azure/login@v2
         with:
@@ -100,8 +110,9 @@ jobs:
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_BACKEND_WEBAPP_NAME }}" \
               --settings \
-                SCM_DO_BUILD_DURING_DEPLOYMENT=true \
-                ENABLE_ORYX_BUILD=true \
+                SCM_DO_BUILD_DURING_DEPLOYMENT=false \
+                ENABLE_ORYX_BUILD=false \
+                PYTHONPATH="/home/site/wwwroot/.python_packages/lib/site-packages" \
                 DATABASE_URL="${{ secrets.BACKEND_DATABASE_URL }}"
 
             az webapp config set \
