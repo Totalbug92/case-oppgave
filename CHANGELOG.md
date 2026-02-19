@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.12](https://github.com/Totalbug92/case-oppgave/compare/v0.3.11...v0.3.12) (2026-02-19)
+
+
+### Bug Fixes
+
+* changed to correct dataset ([a84d534](https://github.com/Totalbug92/case-oppgave/commit/a84d5341029a92a0d0e6fd9d4c53d3405de028e1))
+* changed to correct dataset ([937cf03](https://github.com/Totalbug92/case-oppgave/commit/937cf0389d44f556429723035fc0aab9f98eae68))
+
 ## [0.3.11](https://github.com/Totalbug92/case-oppgave/compare/v0.3.10...v0.3.11) (2026-02-19)
 
 
