@@ -22,6 +22,14 @@ jobs:
       deploy_backend: ${{ steps.vars.outputs.deploy_backend }}
       deploy_frontend: ${{ steps.vars.outputs.deploy_frontend }}
     steps:
+      - name: Validate deployment target names
+        run: |
+          if [ "${{ secrets.AZURE_BACKEND_WEBAPP_NAME }}" = "${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}" ]; then
+            echo "AZURE_BACKEND_WEBAPP_NAME and AZURE_FRONTEND_WEBAPP_NAME are identical."
+            echo "Backend and frontend must deploy to different Web Apps."
+            exit 1
+          fi
+
       - name: Debug event context
         run: |
           echo "event_name=${{ github.event_name }}"
@@ -113,12 +121,12 @@ jobs:
                 SCM_DO_BUILD_DURING_DEPLOYMENT=false \
                 ENABLE_ORYX_BUILD=false \
                 PYTHONPATH="/home/site/wwwroot/.python_packages/lib/site-packages" \
-                DATABASE_URL="${{ secrets.BACKEND_DATABASE_URL }}"
+                INIT_DB_ON_START=false
 
             az webapp config set \
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_BACKEND_WEBAPP_NAME }}" \
-              --startup-file "gunicorn -w 2 -k uvicorn.workers.UvicornWorker main:app"
+              --startup-file "gunicorn -w 1 -t 120 -k uvicorn.workers.UvicornWorker main:app"
 
       - name: Create backend zip package
         shell: bash
