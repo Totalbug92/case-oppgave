@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.11](https://github.com/Totalbug92/case-oppgave/compare/v0.3.10...v0.3.11) (2026-02-19)
+
+
+### Bug Fixes
+
+* frontend deploy hanging fix ([7c47f19](https://github.com/Totalbug92/case-oppgave/commit/7c47f191af33aed041d95a7b4d3775a3b648105a))
+* frontend deploy hanging fix ([3b72c6c](https://github.com/Totalbug92/case-oppgave/commit/3b72c6c7780b9525eef9fca2fa35e8209eb82ff7))
+
 ## [0.3.10](https://github.com/Totalbug92/case-oppgave/compare/v0.3.9...v0.3.10) (2026-02-19)
 
 
