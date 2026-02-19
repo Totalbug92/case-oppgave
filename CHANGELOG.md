@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.2](https://github.com/Totalbug92/case-oppgave/compare/v0.3.1...v0.3.2) (2026-02-19)
+
+
+### Bug Fixes
+
+* Fix/test release ([3770cc7](https://github.com/Totalbug92/case-oppgave/commit/3770cc77ae0621c93f3298f807095880c0873b90))
+* trying env instead of branch ([79ec2cb](https://github.com/Totalbug92/case-oppgave/commit/79ec2cb1836f2f690dfc1ea3aa0e01a7ea2b778a))
+* Your descriptive commit message ([4e3afc2](https://github.com/Totalbug92/case-oppgave/commit/4e3afc21fb6a546d41cbb103c910f853435dbf36))
+
 ## [0.3.1](https://github.com/Totalbug92/case-oppgave/compare/v0.3.0...v0.3.1) (2026-02-19)
 
 
