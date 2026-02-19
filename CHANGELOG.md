@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.13](https://github.com/Totalbug92/case-oppgave/compare/v0.3.12...v0.3.13) (2026-02-19)
+
+
+### Bug Fixes
+
+* frontend docker file back to npm ([2ff519d](https://github.com/Totalbug92/case-oppgave/commit/2ff519de7ffc13ad5086d768b086e6867a609504))
+
 ## [0.3.12](https://github.com/Totalbug92/case-oppgave/compare/v0.3.11...v0.3.12) (2026-02-19)
 
 
