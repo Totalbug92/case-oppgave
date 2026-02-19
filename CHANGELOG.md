@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.4](https://github.com/Totalbug92/case-oppgave/compare/v0.3.3...v0.3.4) (2026-02-19)
+
+
+### Bug Fixes
+
+* changed deploy to install dependancies correctly ([dffaa83](https://github.com/Totalbug92/case-oppgave/commit/dffaa83db1dbff982523403780823d827aebe456))
+* changed deploy to install dependancies correctly ([ce40489](https://github.com/Totalbug92/case-oppgave/commit/ce40489bb53567adbd60bcdf1718ec411721f2a4))
+
 ## [0.3.3](https://github.com/Totalbug92/case-oppgave/compare/v0.3.2...v0.3.3) (2026-02-19)
 
 
