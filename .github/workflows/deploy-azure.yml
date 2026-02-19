@@ -1,20 +1,23 @@
 name: deploy-azure
 
 on:
-  release:
-    types: [published, released, created]
-  push:
-    tags:
-      - 'v*'
+  workflow_run:
+    workflows: ["release-please"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
   contents: read
   id-token: write
 
+concurrency:
+  group: deploy-azure-${{ github.event.workflow_run.head_sha || github.ref_name || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master')
     outputs:
       tag: ${{ steps.vars.outputs.tag }}
       deploy_backend: ${{ steps.vars.outputs.deploy_backend }}
@@ -25,13 +28,15 @@ jobs:
           echo "event_name=${{ github.event_name }}"
           echo "ref=${{ github.ref }}"
           echo "ref_name=${{ github.ref_name }}"
-          echo "release_tag=${{ github.event.release.tag_name || '' }}"
+          echo "workflow_conclusion=${{ github.event.workflow_run.conclusion || '' }}"
+          echo "workflow_head_branch=${{ github.event.workflow_run.head_branch || '' }}"
+          echo "workflow_head_sha=${{ github.event.workflow_run.head_sha || '' }}"
 
       - name: Resolve release scope
         id: vars
         shell: bash
         run: |
-          TAG="${{ github.event.release.tag_name || github.ref_name }}"
+          TAG="${{ github.event.workflow_run.head_sha || github.ref_name }}"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "deploy_backend=true" >> "$GITHUB_OUTPUT"
           echo "deploy_frontend=true" >> "$GITHUB_OUTPUT"
