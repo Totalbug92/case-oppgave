@@ -138,10 +138,11 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
-            az webapp deployment source config-zip \
+            az webapp deploy \
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_BACKEND_WEBAPP_NAME }}" \
-              --src backend.zip
+              --src-path backend.zip \
+              --type zip
 
             az webapp restart \
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
@@ -227,6 +228,7 @@ jobs:
                 SCM_DO_BUILD_DURING_DEPLOYMENT=false \
                 ENABLE_ORYX_BUILD=false \
                 WEBSITE_NODE_DEFAULT_VERSION="~20" \
+                BACKEND_API_URL="${{ secrets.FRONTEND_PUBLIC_API_URL }}" \
                 NEXT_PUBLIC_API_URL="${{ secrets.FRONTEND_PUBLIC_API_URL }}"
 
             az webapp config set \
@@ -272,10 +274,11 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
-            az webapp deployment source config-zip \
+            az webapp deploy \
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}" \
-              --src frontend.zip
+              --src-path frontend.zip \
+              --type zip
 
             az webapp restart \
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
