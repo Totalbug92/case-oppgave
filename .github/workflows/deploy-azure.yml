@@ -142,11 +142,23 @@ jobs:
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_BACKEND_WEBAPP_NAME }}" \
               --src-path backend.zip \
-              --type zip
+              --type zip \
+              --async true
+
+            sleep 20
 
             az webapp restart \
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_BACKEND_WEBAPP_NAME }}"
+
+            for i in {1..30}; do
+              STATE=$(az webapp show --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" --name "${{ secrets.AZURE_BACKEND_WEBAPP_NAME }}" --query state -o tsv)
+              echo "Backend post-deploy state check #$i: $STATE"
+              if [ "$STATE" = "Running" ]; then
+                break
+              fi
+              sleep 10
+            done
 
   deploy-frontend:
     runs-on: ubuntu-latest
@@ -240,12 +252,14 @@ jobs:
         shell: bash
         run: |
           mkdir -p frontend-dist/.next
-          cp -RL frontend/.next/standalone/. frontend-dist/
+          cp -R frontend/.next/standalone/. frontend-dist/
           cp -R frontend/.next/static frontend-dist/.next/
           if [ -d frontend/public ]; then cp -R frontend/public frontend-dist/public; fi
 
           if [ ! -f frontend-dist/server.js ] && [ -f frontend-dist/frontend/server.js ]; then
-            cp -RL frontend-dist/frontend/. frontend-dist/
+            shopt -s dotglob
+            mv frontend-dist/frontend/* frontend-dist/
+            rmdir frontend-dist/frontend || true
           fi
 
           if [ ! -f frontend-dist/server.js ]; then
@@ -268,6 +282,7 @@ jobs:
           fi
 
           cd frontend-dist
+          du -sh .
           zip -r ../frontend.zip .
 
       - name: Deploy frontend zip to Azure Web App
@@ -278,8 +293,20 @@ jobs:
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}" \
               --src-path frontend.zip \
-              --type zip
+              --type zip \
+              --async true
+
+            sleep 20
 
             az webapp restart \
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}"
+
+            for i in {1..30}; do
+              STATE=$(az webapp show --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" --name "${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}" --query state -o tsv)
+              echo "Frontend post-deploy state check #$i: $STATE"
+              if [ "$STATE" = "Running" ]; then
+                break
+              fi
+              sleep 10
+            done
