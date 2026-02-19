@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.5](https://github.com/Totalbug92/case-oppgave/compare/v0.3.4...v0.3.5) (2026-02-19)
+
+
+### Bug Fixes
+
+* changed to build frontend in github ([d871c25](https://github.com/Totalbug92/case-oppgave/commit/d871c25020e1a3249de0b08a4639ae0591d48696))
+* changed to build frontend in github ([f1c931e](https://github.com/Totalbug92/case-oppgave/commit/f1c931ebb59dc0146b2ec9e24dfb11dcb150eddd))
+
 ## [0.3.4](https://github.com/Totalbug92/case-oppgave/compare/v0.3.3...v0.3.4) (2026-02-19)
 
 
