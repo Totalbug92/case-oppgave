@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.6](https://github.com/Totalbug92/case-oppgave/compare/v0.3.5...v0.3.6) (2026-02-19)
+
+
+### Bug Fixes
+
+* build backened dependencies in github ([69b7718](https://github.com/Totalbug92/case-oppgave/commit/69b7718042916097c062db8be0e3c7f141b90cea))
+* build backened dependencies in github ([9a027dd](https://github.com/Totalbug92/case-oppgave/commit/9a027dd522aa857c0ad8feecd765c241b1502305))
+
 ## [0.3.5](https://github.com/Totalbug92/case-oppgave/compare/v0.3.4...v0.3.5) (2026-02-19)
 
 
