@@ -160,19 +160,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Build frontend (standalone)
         working-directory: frontend
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.FRONTEND_PUBLIC_API_URL }}
         run: |
-          pnpm install --frozen-lockfile
-          pnpm build
+          npm ci
+          npm run build
 
       - name: Azure login (OIDC)
         uses: azure/login@v2
@@ -241,18 +238,30 @@ jobs:
         shell: bash
         run: |
           mkdir -p frontend-dist/.next
-          cp -R frontend/.next/standalone/. frontend-dist/
+          cp -RL frontend/.next/standalone/. frontend-dist/
           cp -R frontend/.next/static frontend-dist/.next/
           if [ -d frontend/public ]; then cp -R frontend/public frontend-dist/public; fi
 
           if [ ! -f frontend-dist/server.js ] && [ -f frontend-dist/frontend/server.js ]; then
-            cp -R frontend-dist/frontend/. frontend-dist/
+            cp -RL frontend-dist/frontend/. frontend-dist/
           fi
 
           if [ ! -f frontend-dist/server.js ]; then
             echo "Missing server.js in standalone output."
             echo "Contents of frontend-dist:"
             find frontend-dist -maxdepth 3 -type f | sort
+            exit 1
+          fi
+
+          if [ ! -f frontend-dist/node_modules/next/package.json ]; then
+            echo "Missing next runtime in frontend-dist/node_modules."
+            find frontend-dist -maxdepth 4 -type f | sort
+            exit 1
+          fi
+
+          if [ ! -f frontend-dist/node_modules/styled-jsx/package.json ] && [ ! -f frontend-dist/node_modules/next/node_modules/styled-jsx/package.json ]; then
+            echo "Missing styled-jsx runtime dependency in packaged output."
+            find frontend-dist -maxdepth 5 -type f | sort
             exit 1
           fi
 
