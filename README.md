@@ -146,8 +146,8 @@ This keeps cost low while still showing production-style CI/CD and cloud deploym
    - frontend app (Node 20)
 2. Create App Registration + Service Principal and give it `Contributor` on the Resource Group.
 3. Add Federated Credentials for GitHub Actions (at minimum):
-   - `repo:<owner>/<repo>:ref:refs/heads/main`
-   - `repo:<owner>/<repo>:ref:refs/tags/*`
+   - `repo:<owner>/<repo>:environment:production`
+   - (optional fallback) `repo:<owner>/<repo>:ref:refs/heads/master`
 4. Add OIDC secrets in GitHub:
    - `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`
 5. Set backend startup command in Azure Web App:
