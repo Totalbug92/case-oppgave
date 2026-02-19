@@ -156,6 +156,7 @@ This keeps cost low while still showing production-style CI/CD and cloud deploym
    - `DATABASE_URL` = your Azure PostgreSQL connection string
 7. Set frontend app setting:
    - `NEXT_PUBLIC_API_URL` = backend public URL (e.g. `https://<backend>.azurewebsites.net`)
+8. If you get `403 - This web app is stopped`, verify Web App state is `Running` in Azure Portal and ensure your App Service Plan/subscription is active.
 
 #### What you must configure in GitHub
 

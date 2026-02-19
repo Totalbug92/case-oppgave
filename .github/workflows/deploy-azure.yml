@@ -54,6 +54,44 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Validate and start backend web app
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            APP_NAME="${{ secrets.AZURE_BACKEND_WEBAPP_NAME }}"
+            RG="${{ secrets.AZURE_RESOURCE_GROUP }}"
+
+            if ! az webapp show --resource-group "$RG" --name "$APP_NAME" --query name -o tsv > /dev/null; then
+              echo "Backend web app not found."
+              echo "Resource group: $RG"
+              echo "Configured app name: $APP_NAME"
+              echo "Web apps found in resource group:"
+              az webapp list --resource-group "$RG" --query "[].name" -o tsv || true
+              exit 1
+            fi
+
+            STATE=$(az webapp show --resource-group "$RG" --name "$APP_NAME" --query state -o tsv)
+            echo "Current backend state: $STATE"
+            if [ "$STATE" != "Running" ]; then
+              echo "Starting backend web app..."
+              az webapp start --resource-group "$RG" --name "$APP_NAME"
+            fi
+
+            for i in {1..20}; do
+              STATE=$(az webapp show --resource-group "$RG" --name "$APP_NAME" --query state -o tsv)
+              echo "Backend state check #$i: $STATE"
+              if [ "$STATE" = "Running" ]; then
+                break
+              fi
+              sleep 10
+            done
+
+            FINAL_STATE=$(az webapp show --resource-group "$RG" --name "$APP_NAME" --query state -o tsv)
+            if [ "$FINAL_STATE" != "Running" ]; then
+              echo "Backend web app failed to reach Running state."
+              exit 1
+            fi
+
       - name: Configure backend app settings
         uses: azure/cli@v2
         with:
@@ -90,7 +128,7 @@ jobs:
 
   deploy-frontend:
     runs-on: ubuntu-latest
-    needs: prepare
+    needs: [prepare, deploy-backend]
     if: needs.prepare.outputs.deploy_frontend == 'true'
     environment: production
     steps:
@@ -104,6 +142,44 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Validate and start frontend web app
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            APP_NAME="${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}"
+            RG="${{ secrets.AZURE_RESOURCE_GROUP }}"
+
+            if ! az webapp show --resource-group "$RG" --name "$APP_NAME" --query name -o tsv > /dev/null; then
+              echo "Frontend web app not found."
+              echo "Resource group: $RG"
+              echo "Configured app name: $APP_NAME"
+              echo "Web apps found in resource group:"
+              az webapp list --resource-group "$RG" --query "[].name" -o tsv || true
+              exit 1
+            fi
+
+            STATE=$(az webapp show --resource-group "$RG" --name "$APP_NAME" --query state -o tsv)
+            echo "Current frontend state: $STATE"
+            if [ "$STATE" != "Running" ]; then
+              echo "Starting frontend web app..."
+              az webapp start --resource-group "$RG" --name "$APP_NAME"
+            fi
+
+            for i in {1..20}; do
+              STATE=$(az webapp show --resource-group "$RG" --name "$APP_NAME" --query state -o tsv)
+              echo "Frontend state check #$i: $STATE"
+              if [ "$STATE" = "Running" ]; then
+                break
+              fi
+              sleep 10
+            done
+
+            FINAL_STATE=$(az webapp show --resource-group "$RG" --name "$APP_NAME" --query state -o tsv)
+            if [ "$FINAL_STATE" != "Running" ]; then
+              echo "Frontend web app failed to reach Running state."
+              exit 1
+            fi
+
       - name: Configure frontend app settings
         uses: azure/cli@v2
         with:
@@ -114,7 +190,13 @@ jobs:
               --settings \
                 SCM_DO_BUILD_DURING_DEPLOYMENT=true \
                 ENABLE_ORYX_BUILD=true \
+                WEBSITE_NODE_DEFAULT_VERSION="~20" \
                 NEXT_PUBLIC_API_URL="${{ secrets.FRONTEND_PUBLIC_API_URL }}"
+
+            az webapp config set \
+              --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
+              --name "${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}" \
+              --startup-file "npm start"
 
       - name: Create frontend zip package
         shell: bash
