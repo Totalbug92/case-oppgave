@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.10](https://github.com/Totalbug92/case-oppgave/compare/v0.3.9...v0.3.10) (2026-02-19)
+
+
+### Bug Fixes
+
+* changing deploy method ([72db0f9](https://github.com/Totalbug92/case-oppgave/commit/72db0f95ee17b102ab7a0f8ae90c437021557f8e))
+
 ## [0.3.9](https://github.com/Totalbug92/case-oppgave/compare/v0.3.8...v0.3.9) (2026-02-19)
 
 
