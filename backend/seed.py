@@ -46,68 +46,76 @@ def seed_expenses_from_csv(db: Session):
     
     # Look for dataset.csv in multiple locations
     csv_paths = [
-        os.path.join(os.path.dirname(__file__), '..', 'dataset.csv'),  # Parent directory
         os.path.join(os.path.dirname(__file__), 'dataset.csv'),  # Current directory
+        os.path.join(os.path.dirname(__file__), '..', 'dataset.csv'),  # Parent directory fallback
         '/app/../dataset.csv',  # Docker context
     ]
     
-    csv_file = None
-    for path in csv_paths:
-        if os.path.exists(path):
-            csv_file = path
-            break
-    
-    if not csv_file:
-        print("Warning: dataset.csv not found. Skipping expense import.")
-        return
-    
-    print(f"Loading expenses from {csv_file}...")
-    
-    try:
-        with open(csv_file, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            expenses = []
-            projects_seen = set()
-            
-            for row in reader:
-                project_id = int(row['ProjectID'])
-                
-                # Auto-create projects as needed
-                if project_id not in projects_seen:
-                    existing_project = db.query(Project).filter(Project.id == project_id).first()
-                    if not existing_project:
-                        project = Project(
-                            id=project_id,
-                            name=f"Project {project_id}",
-                            description=f"Auto-created project {project_id}"
-                        )
-                        db.add(project)
-                        db.flush()  # Flush to ensure project exists for FK constraint
-                    projects_seen.add(project_id)
-                
-                expense = Expense(
-                    project_id=int(row['ProjectID']),
-                    expense_type=row['ExpenseType'],
-                    amount=float(row['Amount']),
-                    description=row.get('Description', '')
-                )
-                expenses.append(expense)
-            
-            db.add_all(expenses)
-            db.commit()
-            
-            # Reset sequences to avoid conflicts with auto-increment
-            try:
-                db.execute(text("SELECT setval('projects_id_seq', (SELECT MAX(id) FROM projects) + 1)"))
+    imported = False
+
+    for csv_file in csv_paths:
+        if not os.path.exists(csv_file):
+            continue
+
+        print(f"Loading expenses from {csv_file}...")
+
+        try:
+            with open(csv_file, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+
+                if not reader.fieldnames or 'ProjectID' not in reader.fieldnames:
+                    print(f"Warning: Invalid or empty CSV at {csv_file}. Trying next path...")
+                    continue
+
+                expenses = []
+                projects_seen = set()
+
+                for row in reader:
+                    project_id = int(row['ProjectID'])
+
+                    if project_id not in projects_seen:
+                        existing_project = db.query(Project).filter(Project.id == project_id).first()
+                        if not existing_project:
+                            project = Project(
+                                id=project_id,
+                                name=f"Project {project_id}",
+                                description=f"Auto-created project {project_id}"
+                            )
+                            db.add(project)
+                            db.flush()
+                        projects_seen.add(project_id)
+
+                    expense = Expense(
+                        project_id=project_id,
+                        expense_type=row['ExpenseType'],
+                        amount=float(row['Amount']),
+                        description=row.get('Description', '')
+                    )
+                    expenses.append(expense)
+
+                if not expenses:
+                    print(f"Warning: CSV at {csv_file} has no data rows. Trying next path...")
+                    continue
+
+                db.add_all(expenses)
                 db.commit()
-            except Exception as seq_err:
-                print(f"Warning: Could not reset sequence: {seq_err}")
-            
-            print(f"Successfully imported {len(expenses)} expenses and {len(projects_seen)} projects")
-    
-    except Exception as e:
-        print(f"Error loading CSV: {e}")
-        db.rollback()
+
+                try:
+                    db.execute(text("SELECT setval('projects_id_seq', (SELECT MAX(id) FROM projects) + 1)"))
+                    db.commit()
+                except Exception as seq_err:
+                    print(f"Warning: Could not reset sequence: {seq_err}")
+
+                print(f"Successfully imported {len(expenses)} expenses and {len(projects_seen)} projects")
+                imported = True
+                break
+
+        except Exception as e:
+            print(f"Error loading CSV from {csv_file}: {e}")
+            db.rollback()
+
+    if not imported:
+        print("Warning: No usable dataset.csv found. Skipping expense import.")
 
 
 def seed_default_project_allocations(db: Session):
