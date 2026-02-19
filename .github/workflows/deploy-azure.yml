@@ -119,12 +119,14 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
-            az webapp deploy \
+            az webapp deployment source config-zip \
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_BACKEND_WEBAPP_NAME }}" \
-              --src-path backend.zip \
-              --type zip \
-              --clean true
+              --src backend.zip
+
+            az webapp restart \
+              --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
+              --name "${{ secrets.AZURE_BACKEND_WEBAPP_NAME }}"
 
   deploy-frontend:
     runs-on: ubuntu-latest
@@ -208,9 +210,11 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
-            az webapp deploy \
+            az webapp deployment source config-zip \
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}" \
-              --src-path frontend.zip \
-              --type zip \
-              --clean true
+              --src frontend.zip
+
+            az webapp restart \
+              --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
+              --name "${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}"
