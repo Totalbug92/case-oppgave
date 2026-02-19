@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.8](https://github.com/Totalbug92/case-oppgave/compare/v0.3.7...v0.3.8) (2026-02-19)
+
+
+### Bug Fixes
+
+* paralel deploy, fixing frontend finding server.js ([389af0b](https://github.com/Totalbug92/case-oppgave/commit/389af0bb4b225f85fbe54c7a5261bcab3a5e60a0))
+* paralel deploy, fixing frontend finding server.js ([7996e74](https://github.com/Totalbug92/case-oppgave/commit/7996e747a836642d9afe8c1202a509ce261343e0))
+
 ## [0.3.7](https://github.com/Totalbug92/case-oppgave/compare/v0.3.6...v0.3.7) (2026-02-19)
 
 
