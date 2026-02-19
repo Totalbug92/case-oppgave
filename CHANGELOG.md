@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.9](https://github.com/Totalbug92/case-oppgave/compare/v0.3.8...v0.3.9) (2026-02-19)
+
+
+### Bug Fixes
+
+* removed pnpm reference and pnpm-lcok ([c275640](https://github.com/Totalbug92/case-oppgave/commit/c27564089af22deb811b1a08aab495866d792d2f))
+* removed pnpm reference and pnpm-lcok ([20dba43](https://github.com/Totalbug92/case-oppgave/commit/20dba4364b296f6e3eb3b9a8083edefc131c9b4f))
+
 ## [0.3.8](https://github.com/Totalbug92/case-oppgave/compare/v0.3.7...v0.3.8) (2026-02-19)
 
 
