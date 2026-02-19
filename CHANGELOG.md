@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.3](https://github.com/Totalbug92/case-oppgave/compare/v0.3.2...v0.3.3) (2026-02-19)
+
+
+### Bug Fixes
+
+* trying sequential deploy ([6e8be09](https://github.com/Totalbug92/case-oppgave/commit/6e8be097f313372f5fc943396e7dc1463a439348))
+* trying sequential deploy ([9297203](https://github.com/Totalbug92/case-oppgave/commit/92972037ed4a964890655387c9f6d8be831cfbec))
+
 ## [0.3.2](https://github.com/Totalbug92/case-oppgave/compare/v0.3.1...v0.3.2) (2026-02-19)
 
 
