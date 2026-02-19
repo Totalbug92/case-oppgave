@@ -117,7 +117,7 @@ With current config, monorepo uses lockstep tags:
 
 Workflow: [ .github/workflows/deploy-azure.yml ](.github/workflows/deploy-azure.yml)
 
-On GitHub Release (published/released/created) or version tag push (`v*`), it deploys both frontend and backend to Azure Web Apps using OIDC + Azure CLI (no publish profile XML required).
+After a successful `release-please` run on `master` (or manual dispatch), it deploys both frontend and backend to Azure Web Apps using OIDC + Azure CLI (no publish profile XML required).
 
 Required GitHub repository secrets:
 
