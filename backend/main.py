@@ -18,7 +18,8 @@ from seed import init_db
 load_dotenv()
 
 # Initialize database and seed with data
-init_db()
+if os.getenv("INIT_DB_ON_START", "true").lower() == "true":
+    init_db()
 
 app = FastAPI(
     title="Case API",
