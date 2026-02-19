@@ -137,6 +137,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Build frontend (standalone)
+        working-directory: frontend
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.FRONTEND_PUBLIC_API_URL }}
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+
       - name: Azure login (OIDC)
         uses: azure/login@v2
         with:
@@ -190,21 +208,25 @@ jobs:
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}" \
               --settings \
-                SCM_DO_BUILD_DURING_DEPLOYMENT=true \
-                ENABLE_ORYX_BUILD=true \
+                SCM_DO_BUILD_DURING_DEPLOYMENT=false \
+                ENABLE_ORYX_BUILD=false \
                 WEBSITE_NODE_DEFAULT_VERSION="~20" \
                 NEXT_PUBLIC_API_URL="${{ secrets.FRONTEND_PUBLIC_API_URL }}"
 
             az webapp config set \
               --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
               --name "${{ secrets.AZURE_FRONTEND_WEBAPP_NAME }}" \
-              --startup-file "npm start"
+              --startup-file "node server.js"
 
       - name: Create frontend zip package
         shell: bash
         run: |
-          cd frontend
-          zip -r ../frontend.zip . -x "node_modules/*" ".next/*"
+          mkdir -p frontend-dist/.next
+          cp -R frontend/.next/standalone/. frontend-dist/
+          cp -R frontend/.next/static frontend-dist/.next/
+          if [ -d frontend/public ]; then cp -R frontend/public frontend-dist/public; fi
+          cd frontend-dist
+          zip -r ../frontend.zip .
 
       - name: Deploy frontend zip to Azure Web App
         uses: azure/cli@v2
