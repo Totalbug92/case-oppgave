@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.7](https://github.com/Totalbug92/case-oppgave/compare/v0.3.6...v0.3.7) (2026-02-19)
+
+
+### Bug Fixes
+
+* changing db init through api? ([c47a934](https://github.com/Totalbug92/case-oppgave/commit/c47a9346909df0e5edadd33ea45375f613e84d65))
+* changing db init through api? ([3efa93e](https://github.com/Totalbug92/case-oppgave/commit/3efa93efdc7df1e10d67fe40ddb1312e70ca73ff))
+
 ## [0.3.6](https://github.com/Totalbug92/case-oppgave/compare/v0.3.5...v0.3.6) (2026-02-19)
 
 
