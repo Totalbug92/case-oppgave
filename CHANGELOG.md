@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1](https://github.com/Totalbug92/case-oppgave/compare/v0.3.0...v0.3.1) (2026-02-19)
+
+
+### Bug Fixes
+
+* testing release instead of tag ([e399003](https://github.com/Totalbug92/case-oppgave/commit/e399003183f0ea18cf01b1823b510928846d42e2))
+* testing release instead of tag ([31f44ae](https://github.com/Totalbug92/case-oppgave/commit/31f44ae4501aa74f8553cba320da699380570976))
+
 ## [0.3.0](https://github.com/Totalbug92/case-oppgave/compare/v0.2.0...v0.3.0) (2026-02-18)
 
 
